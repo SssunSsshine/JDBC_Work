@@ -26,6 +26,17 @@ public class Tourist implements Entity {
         this.phone = phone;
     }
 
+    public Tourist(Tourist tourist) {
+        this.id = tourist.id;
+        this.surname = tourist.surname;
+        this.name = tourist.name;
+        this.patronymic = tourist.patronymic;
+        this.birthday = tourist.birthday;
+        this.email = tourist.email;
+        this.phone = tourist.phone;
+    }
+
+
     public void setId(Long id) {
         this.id = id;
     }

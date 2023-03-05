@@ -14,6 +14,16 @@ public class TourOperator implements Entity{
     public TourOperator() {
     }
 
+    public TourOperator(TourOperator tourOperator) {
+        this.id = tourOperator.id;
+        this.fullName = tourOperator.fullName;
+        this.shortName = tourOperator.shortName;
+        this.inn = tourOperator.inn;
+        this.phone = tourOperator.phone;
+        this.email = tourOperator.email;
+        this.comments = tourOperator.comments;
+    }
+
     public TourOperator(String fullName, String shortName, String inn, String phone, String email, String comments) {
         this.fullName = fullName;
         this.shortName = shortName;

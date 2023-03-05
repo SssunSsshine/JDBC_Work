@@ -13,7 +13,7 @@ public class ConnectionFactory {
         }
     }
 
-    public Connection getConnection() throws SQLException{
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/Test","postgres", "sasha2003");
+    public Connection getConnection() throws SQLException {
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/Test", "postgres", "sasha2003");
     }
 }

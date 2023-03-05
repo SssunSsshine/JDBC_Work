@@ -23,7 +23,7 @@ public class TouristTest {
     @Test
     public void insertDoesNotThrowExceptionWithNullPatronymicNull() throws SQLException {
         if (touristRepository.get(ALEX_TOURIST.getPhone()) != null){
-            touristRepository.delete("WHERE " + "phone_num_tourist = " + "'" + TestData.ALEX_TOURIST.getPhone() + "'");
+            touristRepository.deleteByPhone(TestData.ALEX_TOURIST.getPhone());
         }
 
         Assertions.assertDoesNotThrow(() -> touristRepository.insert(TestData.ALEX_TOURIST));
@@ -32,7 +32,7 @@ public class TouristTest {
     @Test
     public void insertDoesNotThrowExceptionWithNullEmail() throws SQLException {
         if (touristRepository.get(JAMES_TOURIST.getPhone()) != null){
-            touristRepository.delete("WHERE " + "phone_num_tourist = " + "'" + TestData.JAMES_TOURIST.getPhone() + "'");
+            touristRepository.deleteByPhone(TestData.JAMES_TOURIST.getPhone());
         }
 
         Assertions.assertDoesNotThrow(() -> touristRepository.insert(TestData.JAMES_TOURIST));
@@ -41,13 +41,13 @@ public class TouristTest {
     @Test
     public void touristIsInserted() throws SQLException {
         if (touristRepository.get(ALEX_TOURIST.getPhone()) != null){
-            touristRepository.delete("WHERE " + "phone_num_tourist = " + "'" + TestData.ALEX_TOURIST.getPhone() + "'");
+            touristRepository.deleteByPhone(TestData.ALEX_TOURIST.getPhone());
         }
 
         touristRepository.insert(TestData.ALEX_TOURIST);
         Tourist touristAfter = touristRepository.get(ALEX_TOURIST.getPhone());
 
-        touristRepository.delete("WHERE " + "phone_num_tourist = " + "'" + TestData.ALEX_TOURIST.getPhone() + "'");
+        touristRepository.deleteByPhone(TestData.ALEX_TOURIST.getPhone());
 
         Assertions.assertNotEquals(null, touristAfter);
     }
@@ -58,7 +58,7 @@ public class TouristTest {
             touristRepository.insert(ALEX_TOURIST);
         }
 
-        Assertions.assertDoesNotThrow(() -> touristRepository.delete("WHERE " + "phone_num_tourist = " + "'" + TestData.ALEX_TOURIST.getPhone() + "'"));
+        Assertions.assertDoesNotThrow(() -> touristRepository.deleteByPhone(ALEX_TOURIST.getPhone()));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class TouristTest {
         }
 
         try{
-            touristRepository.delete("WHERE " + "phone_num_tourist = '" + ALEX_TOURIST.getPhone() + "'");
+            touristRepository.deleteByPhone(ALEX_TOURIST.getPhone());
         }catch (NullPointerException e){
             System.out.println(e);
             return;
@@ -85,14 +85,15 @@ public class TouristTest {
     public void updateDoesNotThrowException() throws SQLException {
         Tourist mamedov = touristRepository.get(ID_MAMEDOV);
 
-        Assertions.assertDoesNotThrow(()->touristRepository.update("name = " + "'" + "DAWG" + "'", "WHERE " + "id_tourist = " + "'" + mamedov.getId() + "'"));
+        Assertions.assertDoesNotThrow(()->touristRepository.updateNameByID(mamedov, "DAWG"));
     }
 
     @Test
     public void touristIsUpdated() throws SQLException {
-        touristRepository.update("name = " + "'" + "Илья" + "'", "WHERE " + "id_tourist = " + "'" + ID_MAMEDOV + "'");
+        touristRepository.updateNameByID(touristRepository.get(ID_MAMEDOV), "Илья");
         String nameBefore = touristRepository.get(ID_MAMEDOV).getName();
-        touristRepository.update("name = " + "'" + "SHEEEESH" + "'", "WHERE " + "id_tourist = " + "'" + ID_MAMEDOV + "'");
+
+        touristRepository.updateNameByID(touristRepository.get(ID_MAMEDOV), "SHEEESH");
         String nameAfter = touristRepository.get(ID_MAMEDOV).getName();
 
         Assertions.assertNotEquals(nameBefore, nameAfter);

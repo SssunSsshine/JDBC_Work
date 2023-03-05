@@ -19,10 +19,11 @@ public class TourOperatorTest {
     public void getDoesNotThrowException() {
         Assertions.assertDoesNotThrow(() -> tourOperatorRepository.get(ID_TO));
     }
+
     @Test
     public void insertDoesNotThrowExceptionWithNullPatronymicNull() throws SQLException {
         if (tourOperatorRepository.get(TRAVEL_NICE_TO.getInn()) != null) {
-            tourOperatorRepository.delete("WHERE " + "inn = '" + TestData.TRAVEL_NICE_TO.getInn() + "'");
+            tourOperatorRepository.deleteByINN(TestData.TRAVEL_NICE_TO.getInn());
         }
 
         Assertions.assertDoesNotThrow(() -> tourOperatorRepository.insert(TestData.TRAVEL_NICE_TO));
@@ -31,7 +32,7 @@ public class TourOperatorTest {
     @Test
     public void insertDoesNotThrowExceptionWithNullComments() throws SQLException {
         if (tourOperatorRepository.get(LETS_TRAVEL_TO.getInn()) != null) {
-            tourOperatorRepository.delete("WHERE " + "inn = " + "'" + TestData.LETS_TRAVEL_TO.getInn() + "'");
+            tourOperatorRepository.deleteByINN(TestData.LETS_TRAVEL_TO.getInn());
         }
 
         Assertions.assertDoesNotThrow(() -> tourOperatorRepository.insert(TestData.LETS_TRAVEL_TO));
@@ -40,13 +41,13 @@ public class TourOperatorTest {
     @Test
     public void tourOperatorIsInserted() throws SQLException {
         if (tourOperatorRepository.get(TRAVEL_NICE_TO.getInn()) != null) {
-            tourOperatorRepository.delete("WHERE " + "inn = " + "'" + TestData.TRAVEL_NICE_TO.getInn() + "'");
+            tourOperatorRepository.deleteByINN(TestData.TRAVEL_NICE_TO.getInn());
         }
 
         tourOperatorRepository.insert(TestData.TRAVEL_NICE_TO);
         TourOperator tourOperatorAfter = tourOperatorRepository.get(TRAVEL_NICE_TO.getInn());
 
-        tourOperatorRepository.delete("WHERE " + "inn = " + "'" + TestData.TRAVEL_NICE_TO.getInn() + "'");
+        tourOperatorRepository.deleteByINN(TestData.TRAVEL_NICE_TO.getInn());
 
         Assertions.assertNotEquals(null, tourOperatorAfter);
     }
@@ -57,7 +58,7 @@ public class TourOperatorTest {
             tourOperatorRepository.insert(TRAVEL_NICE_TO);
         }
 
-        Assertions.assertDoesNotThrow(() -> tourOperatorRepository.delete("WHERE " + "inn = " + "'" + TestData.TRAVEL_NICE_TO.getInn() + "'"));
+        Assertions.assertDoesNotThrow(() -> tourOperatorRepository.deleteByINN(TestData.TRAVEL_NICE_TO.getInn()));
     }
 
     @Test
@@ -68,7 +69,7 @@ public class TourOperatorTest {
         }
 
         try {
-            tourOperatorRepository.delete("WHERE " + "inn = '" + TRAVEL_NICE_TO.getInn() + "'");
+            tourOperatorRepository.deleteByINN(TRAVEL_NICE_TO.getInn());
         } catch (NullPointerException e) {
             System.out.println(e);
             return;
@@ -82,16 +83,16 @@ public class TourOperatorTest {
 
     @Test
     public void updateDoesNotThrowException() throws SQLException {
-        TourOperator tourOperator = tourOperatorRepository.get(ID_TO);
-
-        Assertions.assertDoesNotThrow(() -> tourOperatorRepository.update("full_nameto = '" + "Travel&Nevil" + "'", "WHERE " + "id_to = '" + tourOperator.getId() + "'"));
+        Assertions.assertDoesNotThrow(() -> tourOperatorRepository.updateFullNameByID(tourOperatorRepository.get(ID_TO),
+                "Travel&Nevil"));
     }
 
     @Test
     public void tourOperatorIsUpdated() throws SQLException {
-        tourOperatorRepository.update("full_nameto = '" + "DUUUUDE" + "'", "WHERE " + "id_to = '" + ID_TO + "'");
+        tourOperatorRepository.updateFullNameByID(tourOperatorRepository.get(ID_TO), "DUUUDE");
         String nameBefore = tourOperatorRepository.get(ID_TO).getFullName();
-        tourOperatorRepository.update("full_nameto = '" + "Travel&Nevil" + "'", "WHERE " + "id_to = '" + ID_TO + "'");
+
+        tourOperatorRepository.updateFullNameByID(tourOperatorRepository.get(ID_TO), "Travel&Nevil");
         String nameAfter = tourOperatorRepository.get(ID_TO).getFullName();
 
         Assertions.assertNotEquals(nameBefore, nameAfter);
